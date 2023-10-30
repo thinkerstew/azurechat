@@ -2,6 +2,7 @@ import { APP_VERSION } from "@/app-global";
 
 export const UpdateIndicatorAction = async () => {
   const appVersion = await fetch(
+    // TODO this should be a config value
     "https://raw.githubusercontent.com/microsoft/azurechat/main/src/package.json",
     {
       cache: "no-cache",

@@ -1,14 +1,26 @@
 param name string = 'azurechat-demo'
 param resourceToken string
 
+param adminEmailAddress string
+param authGitHubId string
+@secure()
+param authGitHubSecret string
+param azureAdClientId string
+@secure()
+param azureAdClientSecret string
+param azureAdTenantId string
+
 param openai_api_version string
 
-param openAiResourceGroupLocation string
+param openAiInstanceName string?
+@secure()
+param openAiKey string?
+param openAiResourceGroupLocation string?
 param openAiSkuName string = 'S0'
 param chatGptDeploymentCapacity int = 30
 param chatGptDeploymentName string = 'chat-gpt-35-turbo'
 param chatGptModelName string = 'chat-gpt-35-turbo'
-param chatGptModelVersion string = '0613'
+param chatGptModelVersion string = '0301'
 param embeddingDeploymentName string = 'text-embedding-ada-002'
 param embeddingDeploymentCapacity int = 30
 param embeddingModelName string = 'text-embedding-ada-002'
@@ -26,7 +38,7 @@ param nextAuthHash string = uniqueString(newGuid())
 
 param tags object = {}
 
-var openai_name = toLower('${name}ai${resourceToken}')
+var openai_name = openAiInstanceName == null ? toLower('${name}ai${resourceToken}') : openAiInstanceName
 var form_recognizer_name = toLower('${name}-form-${resourceToken}')
 var speech_service_name = toLower('${name}-speech-${resourceToken}')
 var cosmos_name = toLower('${name}-cosmos-${resourceToken}')
@@ -44,7 +56,7 @@ var keyVaultSecretsUserRole = subscriptionResourceId('Microsoft.Authorization/ro
 var databaseName = 'chat'
 var containerName = 'history'
 
-var deployments = [
+var deployments = openAiKey == null ? [
   {
     name: chatGptDeploymentName
     model: {
@@ -66,7 +78,7 @@ var deployments = [
     }
     capacity: embeddingDeploymentCapacity
   }
-]
+] : []
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appservice_name
@@ -98,7 +110,31 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       appCommandLine: 'next start'
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
-      appSettings: [ 
+      appSettings: [
+        {
+          name: 'ADMIN_EMAIL_ADDRESS'
+          value: adminEmailAddress
+        }
+        {
+          name: 'AUTH_GITHUB_ID'
+          value: authGitHubId
+        }
+        {
+          name: 'AUTH_GITHUB_SECRET'
+          value: authGitHubSecret
+        }
+        {
+          name: 'AZURE_AD_CLIENT_ID'
+          value: azureAdClientId
+        }
+        {
+          name: 'AZURE_AD_CLIENT_SECRET'
+          value: azureAdClientSecret
+        }
+        {
+          name: 'AZURE_AD_TENANT_ID'
+          value: azureAdTenantId
+        }
         {
           name: 'AZURE_COSMOSDB_KEY'
           value: '@Microsoft.KeyVault(VaultName=${kv.name};SecretName=${kv::AZURE_COSMOSDB_KEY.name})'
@@ -115,23 +151,23 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
           name: 'AZURE_SEARCH_API_KEY'
           value: '@Microsoft.KeyVault(VaultName=${kv.name};SecretName=${kv::AZURE_SEARCH_API_KEY.name})'
         }
-        { 
+        {
           name: 'AZURE_SEARCH_API_VERSION'
           value: searchServiceAPIVersion
         }
-        { 
+        {
           name: 'AZURE_SEARCH_NAME'
           value: search_name
         }
-        { 
+        {
           name: 'AZURE_SEARCH_INDEX_NAME'
           value: searchServiceIndexName
         }
-        { 
+        {
           name: 'AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT'
           value: 'https://${form_recognizer_name}.cognitiveservices.azure.com/'
         }
-        { 
+        {
           name: 'SCM_DO_BUILD_DURING_DEPLOYMENT'
           value: 'true'
         }
@@ -165,7 +201,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
         }
         {
           name: 'AZURE_SPEECH_REGION'
-          value: resourceGroup().location
+          value: location
         }
         {
           name: 'AZURE_SPEECH_KEY'
@@ -174,7 +210,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       ]
     }
   }
-  identity: { type: 'SystemAssigned'}
+  identity: { type: 'SystemAssigned' }
 }
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview' = {
@@ -234,7 +270,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
     name: 'AZURE-OPENAI-API-KEY'
     properties: {
       contentType: 'text/plain'
-      value: azureopenai.listKeys().key1
+      value: openAiKey == null ? azureopenai.listKeys().key1 : openAiKey
     }
   }
 
@@ -253,7 +289,6 @@ resource kv 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
       value: speechService.listKeys().key1
     }
   }
-
 
   resource AZURE_SEARCH_API_KEY 'secrets' = {
     name: 'AZURE-SEARCH-API-KEY'
@@ -290,7 +325,8 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
 }
 
 resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15' = {
-  name: '${cosmosDbAccount.name}/${databaseName}'
+  parent: cosmosDbAccount
+  name: databaseName
   properties: {
     resource: {
       id: databaseName
@@ -299,7 +335,8 @@ resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2022-05-15
 }
 
 resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2022-05-15' = {
-  name: '${database.name}/${containerName}'
+  parent: database
+  name: containerName
   properties: {
     resource: {
       id: containerName
@@ -341,7 +378,7 @@ resource searchService 'Microsoft.Search/searchServices@2022-09-01' = {
   }
 }
 
-resource azureopenai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+resource azureopenai 'Microsoft.CognitiveServices/accounts@2023-05-01' = if (openAiKey == null) {
   name: openai_name
   location: openAiResourceGroupLocation
   tags: tags
@@ -384,3 +421,16 @@ resource speechService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 }
 
 output url string = 'https://${webApp.properties.defaultHostName}'
+output AZURE_COSMOSDB_URI string = cosmosDbAccount.properties.documentEndpoint
+output AZURE_COSMOSDB_KEY string = cosmosDbAccount.listKeys().secondaryMasterKey
+output AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT string = 'https://${formRecognizer.properties.customSubDomainName}.cognitiveservices.azure.com/'
+output AZURE_DOCUMENT_INTELLIGENCE_KEY string = formRecognizer.listKeys().key1
+output AZURE_OPENAI_API_DEPLOYMENT_NAME string = chatGptDeploymentName
+output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingDeploymentName
+output AZURE_OPENAI_API_INSTANCE_NAME string = openai_name
+output AZURE_OPENAI_API_KEY string? = openAiKey
+output AZURE_SEARCH_API_KEY string = searchService.listAdminKeys().secondaryKey
+output AZURE_SPEECH_KEY string = speechService.listKeys().key1
+output AZURE_SEARCH_INDEX_NAME string = searchServiceIndexName
+output AZURE_SEARCH_NAME string = search_name
+output AZURE_SPEECH_REGION string = location
