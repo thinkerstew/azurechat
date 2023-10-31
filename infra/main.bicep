@@ -80,7 +80,7 @@ module resources 'resources.bicep' = {
     azureAdTenantId: azureAdTenantId
     openai_api_version: openAIApiVersion
     openAiInstanceName: openAIInstanceName
-    openAiKey: openAIKey
+    openAiKey: empty(openAIKey) ? null : openAIKey
     openAiResourceGroupLocation: openAILocation
     openAiSkuName: openAISku
     chatGptDeploymentCapacity: chatGptDeploymentCapacity

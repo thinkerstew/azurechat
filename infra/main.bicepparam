@@ -18,17 +18,17 @@ param azureAdTenantId = readEnvironmentVariable('AZURE_AD_TENANT_ID')
 // Update your Azure OpenAI details
 
 // deployment name from your azure openai studio
-param chatGptDeploymentName = readEnvironmentVariable('AZURE_OPENAI_API_DEPLOYMENT_NAME')
+param chatGptDeploymentName = readEnvironmentVariable('AZURE_OPENAI_API_DEPLOYMENT_NAME', 'chat-gpt-35-turbo')
 // model name from your azure openai studio
-param chatGptModelVersion = readEnvironmentVariable('AZURE_OPENAI_API_MODEL_VERSION')
+param chatGptModelVersion = readEnvironmentVariable('AZURE_OPENAI_API_MODEL_VERSION', '0613')
 // embedding deployment name from your openai studio
-param embeddingDeploymentName = readEnvironmentVariable('AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME')
+param embeddingDeploymentName = readEnvironmentVariable('AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME', 'embedding')
 // Supported versions checkout docs https://learn.microsoft.com/en-us/azure/ai-services/openai/reference
-param openAIApiVersion = readEnvironmentVariable('AZURE_OPENAI_API_VERSION')
+param openAIApiVersion = readEnvironmentVariable('AZURE_OPENAI_API_VERSION', '2023-03-15-preview')
 // name of azure openai resource and not the full url
 param openAIInstanceName = readEnvironmentVariable('AZURE_OPENAI_API_INSTANCE_NAME')
 // access key
-param openAIKey = readEnvironmentVariable('AZURE_OPENAI_API_KEY')
+param openAIKey = readEnvironmentVariable('AZURE_OPENAI_API_KEY', '')
 
 // Update your production Next.js auth secret
 param nextAuthSecret = readEnvironmentVariable('NEXTAUTH_SECRET')

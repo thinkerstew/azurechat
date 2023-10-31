@@ -20,7 +20,7 @@ param openAiSkuName string = 'S0'
 param chatGptDeploymentCapacity int = 30
 param chatGptDeploymentName string = 'chat-gpt-35-turbo'
 param chatGptModelName string = 'chat-gpt-35-turbo'
-param chatGptModelVersion string = '0301'
+param chatGptModelVersion string = '0613'
 param embeddingDeploymentName string = 'text-embedding-ada-002'
 param embeddingDeploymentCapacity int = 30
 param embeddingModelName string = 'text-embedding-ada-002'
@@ -428,7 +428,7 @@ output AZURE_DOCUMENT_INTELLIGENCE_KEY string = formRecognizer.listKeys().key1
 output AZURE_OPENAI_API_DEPLOYMENT_NAME string = chatGptDeploymentName
 output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingDeploymentName
 output AZURE_OPENAI_API_INSTANCE_NAME string = openai_name
-output AZURE_OPENAI_API_KEY string? = openAiKey
+output AZURE_OPENAI_API_KEY string? = openAiKey == null ? azureopenai.listKeys().key1 : openAiKey
 output AZURE_SEARCH_API_KEY string = searchService.listAdminKeys().secondaryKey
 output AZURE_SPEECH_KEY string = speechService.listKeys().key1
 output AZURE_SEARCH_INDEX_NAME string = searchServiceIndexName
