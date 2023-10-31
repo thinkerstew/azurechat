@@ -42,7 +42,8 @@ const configureIdentityProvider = () => {
             ...profile,
             // throws error without this - unsure of the root cause (https://stackoverflow.com/questions/76244244/profile-id-is-missing-in-google-oauth-profile-response-nextauth)
             id: profile.sub,
-            isAdmin: adminEmails?.includes(profile.email.toLowerCase()) || adminEmails?.includes(profile.preferred_username.toLowerCase())
+            isAdmin: (profile.email?.toLowerCase() ? adminEmails?.includes(profile.email.toLowerCase()) : false) ||
+              adminEmails?.includes(profile.preferred_username.toLowerCase())
           }
           return newProfile;
         }
@@ -61,7 +62,7 @@ const configureIdentityProvider = () => {
         credentials: {
           username: { label: "Username", type: "text", placeholder: "dev" },
           password: { label: "Password", type: "password" },
-        },    
+        },
         async authorize(credentials, req): Promise<any> {
           // You can put logic here to validate the credentials and return a user.
           // We're going to take any username and make a new user with it
@@ -69,12 +70,12 @@ const configureIdentityProvider = () => {
           const username = credentials?.username || "dev";
           const email = username + "@localhost";
           const user = {
-              id: hashValue(email),
-              name: username,
-              email: email,
-              isAdmin: false,
-              image: "",
-            };
+            id: hashValue(email),
+            name: username,
+            email: email,
+            isAdmin: false,
+            image: "",
+          };
           console.log("=== DEV USER LOGGED IN:\n", JSON.stringify(user, null, 2));
           return user;
         }
@@ -89,13 +90,13 @@ export const options: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [...configureIdentityProvider()],
   callbacks: {
-    async jwt({token, user, account, profile, isNewUser, session}) {
+    async jwt({ token, user, account, profile, isNewUser, session }) {
       if (user?.isAdmin) {
-       token.isAdmin = user.isAdmin
+        token.isAdmin = user.isAdmin
       }
       return token
     },
-    async session({session, token, user }) {
+    async session({ session, token, user }) {
       session.user.isAdmin = token.isAdmin as string
       return session
     }
