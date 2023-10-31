@@ -1,13 +1,17 @@
 .PHONY: deploy undeploy run
 
-# TODO fix .env.development sym link hack (sym link doesn't work in app package)
+login:
+	azd auth login
+
 deploy:
-	rm -f ./src/.env.development.local
-	azd up --no-prompt
-	ln -sf ../.azure/dev/.env ./src/.env.development.local
+	set -o allexport;\
+	. ./.env.development.local;\
+	azd up --no-prompt;\
+	cd src;\
+	azd env get-values > .env.development.local
 
 undeploy:
 	azd down --purge --force
 
 run:
-	cd src; npm run dev
+	npm run dev
