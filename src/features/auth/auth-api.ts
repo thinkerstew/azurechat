@@ -94,6 +94,9 @@ export const options: NextAuthOptions = {
       if (user?.isAdmin) {
         token.isAdmin = user.isAdmin
       }
+      if (profile?.roles) {
+        token.roles = [...profile.roles]
+      }
       return token
     },
     async session({ session, token, user }) {
