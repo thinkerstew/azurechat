@@ -12,7 +12,7 @@ export default async function Home() {
   }
   return (
     <Card className="h-full flex-1 overflow-hidden relative items-center justify-center flex">
-      <LogIn />
+      <LogIn showGitHubButton={process.env.AUTH_GITHUB_ID ? true : false} showAzureADButton={process.env.AZURE_AD_CLIENT_ID ? true : false} />
     </Card>
   );
 }

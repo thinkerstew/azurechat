@@ -2,6 +2,7 @@ param name string = 'azurechat-demo'
 param resourceToken string
 
 param adminEmailAddress string
+param authRole string?
 param authGitHubId string
 @secure()
 param authGitHubSecret string
@@ -116,6 +117,10 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
           value: adminEmailAddress
         }
         {
+          name: 'AUTH_ROLE'
+          value: authRole
+        }
+        {
           name: 'AUTH_GITHUB_ID'
           value: authGitHubId
         }
@@ -198,6 +203,10 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
         {
           name: 'NEXTAUTH_URL'
           value: 'https://${webapp_name}.azurewebsites.net'
+        }
+        {
+          name: 'NEXT_PUBLIC_SPEECH_ENABLED'
+          value: 'true'
         }
         {
           name: 'AZURE_SPEECH_REGION'

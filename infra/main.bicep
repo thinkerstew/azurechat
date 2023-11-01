@@ -11,6 +11,7 @@ param location string
 
 param adminEmailAddress string
 param authGitHubId string
+param authRole string?
 @secure()
 param authGitHubSecret string
 param azureAdClientId string
@@ -73,6 +74,7 @@ module resources 'resources.bicep' = {
     resourceToken: resourceToken
     tags: tags
     adminEmailAddress: adminEmailAddress
+    authRole: authRole
     authGitHubId: authGitHubId
     authGitHubSecret: authGitHubSecret
     azureAdClientId: azureAdClientId
@@ -103,6 +105,7 @@ output ADMIN_EMAIL_ADDRESS string = adminEmailAddress
 output APP_URL string = resources.outputs.url
 output AUTH_GITHUB_ID string = authGitHubId
 output AUTH_GITHUB_SECRET string = authGitHubSecret
+output AUTH_ROLE string = authRole
 output AZURE_AD_CLIENT_ID string = azureAdClientId
 output AZURE_AD_CLIENT_SECRET string = azureAdClientSecret
 output AZURE_AD_TENANT_ID string = azureAdTenantId

@@ -1,7 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-const requireAuth: string[] = ["/chat", "/api","/reporting", "/unauthorized"];
+const requireAuth: string[] = ["/chat", "/api", "/reporting", "/unauthorized"];
 const requireAdmin: string[] = ["/reporting"];
 
 
@@ -20,6 +20,11 @@ export async function middleware(request: NextRequest) {
         if (!token) {
             const url = new URL(`/`, request.url);
             return NextResponse.redirect(url);
+        }
+
+        if (token.roles == null || !(token.roles as any).includes(process.env.AUTH_ROLE)) {
+            const url = new URL(`/unauthorized`, request.url);
+            return NextResponse.rewrite(url);
         }
 
         if (requireAdmin.some((path) => pathname.startsWith(path))) {
