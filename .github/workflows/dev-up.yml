@@ -1,0 +1,35 @@
+name: Build and Deploy to Azure dev environment
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: [knowledgebot]
+
+  # Allow manual workflow trigger
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: "Development"
+
+    steps:
+      - name: 🌱 Checkout to the branch
+        uses: actions/checkout@v3
+
+      - name: 🍏 Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install azd
+        uses: Azure/setup-azd@v0.1.0
+
+      - name: Package and deploy to Azure dev
+        run: azd up

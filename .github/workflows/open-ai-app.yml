@@ -99,19 +99,3 @@ jobs:
 
       - name: 🧹 Cleanup
         run: rm ${{ github.workspace }}/Nextjs-site.zip
-
-  dev-up:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install azd
-        uses: Azure/setup-azd@v0.1.0
-      - name: Package and deploy to Azure dev
-        run: azd up
-
-  dev-down:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install azd
-        uses: Azure/setup-azd@v0.1.0
-      - name: Tear down Azure dev deployment
-        run: azd down
