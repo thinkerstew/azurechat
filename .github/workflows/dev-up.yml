@@ -33,7 +33,7 @@ jobs:
 
       - name: 🗝️ Azure Login
         run: |
-          azd login `
+          azd auth login `
             --client-id "$Env:AZURE_AD_CLIENT_ID" `
             --federated-credential-provider "github" `
             --tenant-id "$Env:AZURE_AD_TENANT_ID"      
