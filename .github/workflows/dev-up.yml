@@ -31,6 +31,13 @@ jobs:
       - name: Install azd
         uses: Azure/setup-azd@v0.1.0
 
+      - name: 🗝️ Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
       - name: Package and deploy to Azure dev
         run: azd up --no-prompt
         env:
