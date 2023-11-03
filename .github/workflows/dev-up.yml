@@ -32,7 +32,7 @@ jobs:
         uses: Azure/setup-azd@v0.1.0
 
       - name: Package and deploy to Azure dev
-        run: azd up
+        run: azd up --no-prompt
         env:
           AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
