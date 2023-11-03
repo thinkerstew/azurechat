@@ -2,10 +2,6 @@ name: Stop and remove Azure dev deployment
 
 # When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
-  push:
-    branches: [knowledgebot]
-
   # Allow manual workflow trigger
   workflow_dispatch:
 

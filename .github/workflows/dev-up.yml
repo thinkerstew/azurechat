@@ -3,8 +3,8 @@ name: "Azure Dev: Build and Deploy"
 # When this action will be executed
 on:
   # Automatically trigger it when detected changes in repo
-  push:
-    branches: [knowledgebot]
+  #push:
+  #  branches: [knowledgebot]
 
   # Allow manual workflow trigger
   workflow_dispatch:
@@ -32,11 +32,11 @@ jobs:
         uses: Azure/setup-azd@v0.1.0
 
       - name: 🗝️ Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ vars.AZURE_AD_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+        run: |
+          azd login `
+            --client-id "$Env:AZURE_AD_CLIENT_ID" `
+            --federated-credential-provider "github" `
+            --tenant-id "$Env:AZURE_AD_TENANT_ID"      
 
       - name: Package and deploy to Azure dev
         run: azd up --no-prompt
