@@ -1,4 +1,4 @@
-name: Build and Deploy to Azure dev environment
+name: "Azure Dev: Build and Deploy"
 
 # When this action will be executed
 on:
@@ -34,7 +34,7 @@ jobs:
       - name: 🗝️ Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          client-id: ${{ vars.AZURE_AD_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
