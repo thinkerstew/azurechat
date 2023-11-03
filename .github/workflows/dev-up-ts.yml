@@ -38,6 +38,8 @@ jobs:
       - name: Package and deploy to Azure dev
         run: azd up --no-prompt
         env:
+          AUTH_GITHUB_ID: ${{ vars.AUTH_GITHUB_ID }}
+          AUTH_GITHUB_SECRET: ${{ vars.AUTH_GITHUB_SECRET }}
           AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
