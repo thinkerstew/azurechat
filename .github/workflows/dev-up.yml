@@ -33,3 +33,17 @@ jobs:
 
       - name: Package and deploy to Azure dev
         run: azd up
+        env:
+          AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+          AZURE_OPENAI_API_INSTANCE_NAME: ${{ vars.AZURE_OPENAI_API_INSTANCE_NAME }}
+          ADMIN_EMAIL_ADDRESS: ${{ vars.AZURE_EADMIN_EMAIL_ADDRESSNV_NAME }}
+          AUTH_ROLE: ${{ vars.AUTH_ROLE }}
+          AZURE_AD_CLIENT_ID: ${{ vars.AZURE_AD_CLIENT_ID }}
+          NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
+          AZURE_AD_TENANT_ID: ${{ vars.AZURE_AD_TENANT_ID }}
+
+          AZURE_AD_CLIENT_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
