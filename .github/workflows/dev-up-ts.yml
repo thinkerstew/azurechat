@@ -3,8 +3,8 @@ name: "Azure Dev: Build and Deploy"
 # When this action will be executed
 on:
   # Automatically trigger it when detected changes in repo
-  #push:
-  #  branches: [knowledgebot]
+  push:
+    branches: [knowledgebot]
 
   # Allow manual workflow trigger
   workflow_dispatch:
@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: "Development"
+      name: "Development-ts"
 
     steps:
       - name: 🌱 Checkout to the branch

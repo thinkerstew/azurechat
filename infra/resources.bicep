@@ -39,7 +39,7 @@ param nextAuthHash string = uniqueString(newGuid())
 
 param tags object = {}
 
-var openai_name = openAiInstanceName == null ? toLower('${name}ai${resourceToken}') : openAiInstanceName
+var openai_name = openAiInstanceName == null ? toLower('${name}ai${resourceToken}') : string(openAiInstanceName)
 var form_recognizer_name = toLower('${name}-form-${resourceToken}')
 var speech_service_name = toLower('${name}-speech-${resourceToken}')
 var cosmos_name = toLower('${name}-cosmos-${resourceToken}')

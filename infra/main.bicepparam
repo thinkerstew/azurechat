@@ -9,12 +9,13 @@ param adminEmailAddress = readEnvironmentVariable('ADMIN_EMAIL_ADDRESS')
 
 // Identity provider is optional if you are running in development mode locally (npm run dev)
 param authRole = readEnvironmentVariable('AUTH_ROLE', '')
+
 param authGitHubId = readEnvironmentVariable('AUTH_GITHUB_ID', '')
 param authGitHubSecret = readEnvironmentVariable('AUTH_GITHUB_SECRET', '')
 
-param azureAdClientId = readEnvironmentVariable('AZURE_AD_CLIENT_ID')
-param azureAdClientSecret = readEnvironmentVariable('AZURE_AD_CLIENT_SECRET')
-param azureAdTenantId = readEnvironmentVariable('AZURE_AD_TENANT_ID')
+param azureAdClientId = readEnvironmentVariable('AZURE_AD_CLIENT_ID', '')
+param azureAdClientSecret = readEnvironmentVariable('AZURE_AD_CLIENT_SECRET', '')
+param azureAdTenantId = readEnvironmentVariable('AZURE_AD_TENANT_ID', '')
 
 // Update your Azure OpenAI details
 

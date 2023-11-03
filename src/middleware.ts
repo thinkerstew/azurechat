@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(url);
         }
 
-        if (token.roles == null || !(token.roles as any).includes(process.env.AUTH_ROLE)) {
+        if (process.env.AUTH_ROLE && (token.roles == null || !(token.roles as any).includes(process.env.AUTH_ROLE))) {
             const url = new URL(`/unauthorized`, request.url);
             return NextResponse.rewrite(url);
         }
