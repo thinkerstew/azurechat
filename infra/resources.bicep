@@ -205,6 +205,10 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
           value: 'https://${webapp_name}.azurewebsites.net'
         }
         {
+          name: 'NEXT_PUBLIC_PACKAGE_JSON_URL'
+          value: 'https://raw.githubusercontent.com/thinkerstew/azurechat/knowledgebot/src/package.json'
+        }
+        {
           name: 'NEXT_PUBLIC_SPEECH_ENABLED'
           value: 'true'
         }
