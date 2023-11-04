@@ -2,7 +2,7 @@ import { APP_VERSION } from "@/app-global";
 
 export const VersionDisplay = async () => {
   const appVersion = await fetch(
-    "https://raw.githubusercontent.com/microsoft/azurechat/main/src/package.json",
+    process.env.NEXT_PUBLIC_PACKAGE_JSON_URL,
     {
       cache: "no-cache",
     }
@@ -14,7 +14,7 @@ export const VersionDisplay = async () => {
       <h1 className="text-sm font-bold">
         Version: {APP_VERSION}{" "}
         {APP_VERSION === version ? (
-          <span className="font-normal bg-green-200 rounded-2xl p-1 px-3l">
+          <span className="font-normal bg-green-500 rounded-2xl p-1 px-3l">
             You are up to date
           </span>
         ) : (

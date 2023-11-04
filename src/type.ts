@@ -24,14 +24,15 @@ const azureEnvVars = [
   "ADMIN_EMAIL_ADDRESS",
   "AZURE_SPEECH_REGION",
   "AZURE_SPEECH_KEY",
+  "NEXT_PUBLIC_PACKAGE_JSON_URL",
 ] as const;
 
 type RequiredServerEnvKeys = (typeof azureEnvVars)[number];
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends Record<RequiredServerEnvKeys, string> {}
+    interface ProcessEnv extends Record<RequiredServerEnvKeys, string> { }
   }
 }
 
-export {};
+export { };

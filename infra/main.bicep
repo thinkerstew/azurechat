@@ -131,3 +131,4 @@ output AZURE_TENANT_ID string = tenant().tenantId
 output NEXT_PUBLIC_SPEECH_ENABLED bool = true
 output NEXTAUTH_SECRET string = nextAuthSecret
 output NEXTAUTH_URL string = 'http://localhost:3000'
+output NEXT_PUBLIC_PACKAGE_JSON_URL string = 'https://raw.githubusercontent.com/thinkerstew/azurechat/knowledgebot/src/package.json'
