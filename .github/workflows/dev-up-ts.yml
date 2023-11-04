@@ -39,14 +39,14 @@ jobs:
         run: azd up --no-prompt
         env:
           AUTH_GITHUB_ID: ${{ vars.AUTH_GITHUB_ID }}
-          AUTH_GITHUB_SECRET: ${{ vars.AUTH_GITHUB_SECRET }}
+          AUTH_GITHUB_SECRET: ${{ secrets.AUTH_GITHUB_SECRET }}
           AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
           AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY}}
           AZURE_OPENAI_API_INSTANCE_NAME: ${{ vars.AZURE_OPENAI_API_INSTANCE_NAME }}
-          ADMIN_EMAIL_ADDRESS: ${{ vars.AZURE_EADMIN_EMAIL_ADDRESSNV_NAME }}
+          ADMIN_EMAIL_ADDRESS: ${{ vars.ADMIN_EMAIL_ADDRESS }}
           AUTH_ROLE: ${{ vars.AUTH_ROLE }}
           AZURE_AD_CLIENT_ID: ${{ vars.AZURE_AD_CLIENT_ID }}
           NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
